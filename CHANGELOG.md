@@ -113,6 +113,7 @@
 
 - API-1140: Change $criteria format from `Akeneo\Pim\Structure\Bundle\Doctrine\ORM\Repository\ExternalApi\AttributeRepository`
     the new format is `[property: [['operator' => (string), 'value' => (mixed)]]]`.
+- CPM-101: Remove twig/extensions dependency (abandoned)
 
 ### Codebase
 
