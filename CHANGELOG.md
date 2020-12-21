@@ -119,6 +119,7 @@
 - API-1140: Change $criteria format from `Akeneo\Pim\Structure\Bundle\Doctrine\ORM\Repository\ExternalApi\AttributeRepository`
     the new format is `[property: [['operator' => (string), 'value' => (mixed)]]]`.
 - CPM-100: replace deprecated `Symfony\Component\Translation\TranslatorInterface\TranslatorInterface` by `Symfony\Contracts\Translation\TranslatorInterface`
+- CPM-100: replace deprecated `Symfony\Component\HttpKernel\Event\GetResponseEvent` by `Symfony\Component\HttpKernel\Event\RequestEvent`
 
 ### Codebase
 
@@ -294,7 +295,6 @@
 - Change constructor of `Akeneo\UserManagement\Bundle\EventListener\LocaleSubscriber` to:
     - remove `Symfony\Component\Translation\TranslatorInterface\TranslatorInterface $translator`
     - add  `Symfony\Contracts\Translation\LocaleAwareInterface\LocaleAwareInterface $localeAware`
-
 
 ### CLI commands
 
