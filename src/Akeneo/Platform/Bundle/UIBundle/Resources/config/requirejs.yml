@@ -762,7 +762,7 @@ config:
     pim/job/common/file-path:                                    pimui/js/job/common/file-path
     pim/job/common/label:                                        pimui/js/job/common/label
     pim/job/common/grid:                                         pimui/js/job/common/grid
-    pim/job/execution/summary-table:                             pimui/js/job/execution/summary-table
+    pim/job/execution/summary-table:                             pimui/js/job/execution/SummaryTable
     pim/job/execution/auto-refresh:                              pimui/js/job/execution/auto-refresh
     pim/job/execution/show-profile:                              pimui/js/job/execution/show-profile
     pim/job/execution/stop-job:                                  pimui/js/job/execution/stop-job
