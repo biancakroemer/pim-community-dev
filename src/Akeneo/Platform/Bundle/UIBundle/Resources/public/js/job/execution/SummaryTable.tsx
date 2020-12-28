@@ -1,6 +1,6 @@
 import React from 'react';
-import {ThemeProvider} from 'styled-components';
-import {Level, pimTheme, Table} from 'akeneo-design-system';
+import styled, {ThemeProvider} from 'styled-components';
+import {getColor, Level, pimTheme, Table} from 'akeneo-design-system';
 import {ReactView} from '@akeneo-pim-community/legacy-bridge/src/bridge/react';
 import {DependenciesProvider, useTranslate} from '@akeneo-pim-community/legacy-bridge';
 import {Badge} from 'akeneo-design-system/lib/components/Badge/Badge';
@@ -20,10 +20,14 @@ type JobExecution = {
   stepExecutions?: StepExecution[];
 };
 
+const getStepKey = (step: StepExecution) => {
+  return 'batch_jobs.' + step.job + '.' + step.label + '.label';
+};
+
 const getStepLabel = (step: StepExecution): string => {
   const translate = useTranslate();
 
-  let key = 'batch_jobs.' + step.job + '.' + step.label + '.label';
+  let key = getStepKey(step);
   if (translate(key) === key) {
     key = 'batch_jobs.default_steps.' + step.label;
   }
@@ -45,50 +49,78 @@ type SummaryDetailsProps = {
   step: StepExecution;
 }
 
-// !TODO rewrite without BEM
+// TODO: use get color
+const SummaryDetailsTable = styled(Table)`
+  line-height: 20px;
+  font-size: ${props => props.theme.fontSize.default};
+  color: ${getColor('grey', 140)};
+
+  tr:not(:last-child) {
+    border-bottom: 1px solid ${getColor('grey', 60)};
+  }
+`
+
+const SummaryDetailsCell = styled(Table.Cell)`
+  padding: 6px 4px 6px 4px;
+  border-width: 0px;
+  text-transform: Capitalize;
+`
+
+// TODO: Extract in a dedicated file ?
 const SummaryDetails = ({step}: SummaryDetailsProps) => {
   return (
-    <table className="AknGrid AknGrid--condensed">
-      {Object.keys(step.summary).map(key => (
-        <tr className="AknGrid-bodyRow">
-          <td className="AknGrid-bodyCell">{key}</td>
-          <td className="AknGrid-bodyCell">{step.summary[key]}</td>
-        </tr>
-      ))}
-    </table>
+    <SummaryDetailsTable>
+      <Table.Body>
+        {Object.keys(step.summary).map(key => (
+          <Table.Row key={key}>
+            <SummaryDetailsCell>{key}</SummaryDetailsCell>
+            <SummaryDetailsCell>{step.summary[key]}</SummaryDetailsCell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </SummaryDetailsTable>
   )
 };
+
+const SummaryCell = styled(Table.Cell)`
+  padding: 0px 10px;
+`
+const SummaryHeaderCell = styled(Table.Cell)`
+  text-transform: uppercase;
+`
 
 type SummaryTableProps = {
   jobExecution: JobExecution;
 }
-
+// TODO: To extract in a dedicated file
 const SummaryTable = ({jobExecution}: SummaryTableProps) => {
   const translate = useTranslate();
 
   if (!jobExecution.stepExecutions) return null;
 
+  console.log(jobExecution.stepExecutions);
+
   return (
     <Table>
       <Table.Header>
-        <Table.HeaderCell>{translate('pim_import_export.form.job_execution.summary.header.step').toUpperCase()}</Table.HeaderCell>
-        <Table.HeaderCell>{translate('pim_common.status').toUpperCase()}</Table.HeaderCell>
-        <Table.HeaderCell>{translate('pim_import_export.form.job_execution.summary.header.summary').toUpperCase()}</Table.HeaderCell>
-        <Table.HeaderCell>{translate('pim_import_export.form.job_execution.summary.header.start').toUpperCase()}</Table.HeaderCell>
-        <Table.HeaderCell>{translate('pim_import_export.form.job_execution.summary.header.end').toUpperCase()}</Table.HeaderCell>
+        <SummaryHeaderCell>{translate('pim_import_export.form.job_execution.summary.header.step')}</SummaryHeaderCell>
+        <SummaryHeaderCell>{translate('pim_common.status')}</SummaryHeaderCell>
+        <SummaryHeaderCell>{translate('pim_import_export.form.job_execution.summary.header.summary')}</SummaryHeaderCell>
+        <SummaryHeaderCell>{translate('pim_import_export.form.job_execution.summary.header.start')}</SummaryHeaderCell>
+        <SummaryHeaderCell>{translate('pim_import_export.form.job_execution.summary.header.end')}</SummaryHeaderCell>
       </Table.Header>
       <Table.Body>
         {jobExecution.stepExecutions.map(step => (
-          <Table.Row>
+          <Table.Row key={getStepKey(step)}>
             <Table.Cell>{getStepLabel(step)}</Table.Cell>
             <Table.Cell>
               <Badge level={getStepStatusLevel(step)}>
                 {step.status}
               </Badge>
             </Table.Cell>
-            <Table.Cell>
+            <SummaryCell>
               <SummaryDetails step={step}/>
-            </Table.Cell>
+            </SummaryCell>
             <Table.Cell>{step.startedAt}</Table.Cell>
             <Table.Cell>{step.endedAt}</Table.Cell>
           </Table.Row>

@@ -32,6 +32,7 @@ const Container = styled.div`
   grid-auto-flow: column;
   grid-gap: 5px;
   grid-auto-columns: 1fr;
+  margin-bottom: 20px;
 `;
 
 const guessStepExecutionTrackingLevel = (step: StepExecutionTracking): Level => {

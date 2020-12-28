@@ -27,6 +27,8 @@ type TableRowProps = {
 };
 
 const RowContainer = styled.tr<{isSelected: boolean; isClickable: boolean} & AkeneoThemedProps>`
+  transition: background 0.2s ease-in;
+
   ${({isSelected}) =>
     isSelected &&
     css`
